@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.default-continer {
+    /* container mx-auto px-7 bg-bg-light flex-1 algin-center justify-center */
+    @apply container mx-auto px-7 bg-bg-dark flex-1;
+
+    div, a {
+        /* bg-bg-light */
+        @apply text-white;
+    }
+}

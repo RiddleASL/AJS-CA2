@@ -7,6 +7,7 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "backgroundColor": "#4D6380",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
