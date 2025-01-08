@@ -2,12 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
-.default-continer {
-    /* container mx-auto px-7 bg-bg-light flex-1 algin-center justify-center */
-    @apply container mx-auto px-7 bg-bg-dark flex-1;
+body {
+    @apply bg-bg-dark !important;
+}
 
-    div, a {
-        /* bg-bg-light */
-        @apply text-white;
+/* Custom styles */
+.default-container {
+    /* container mx-auto px-7 bg-bg-light flex-1 algin-center justify-center */
+    @apply container mx-auto bg-bg-dark flex-1 mx-auto px-16;
+
+    > div{
+        /* mx-auto */
+        @apply text-white w-full;
+        > * {
+            /* mx-auto */
+            @apply text-white;
+        }
     }
+    > a {
+        /* mx-auto */
+        @apply text-warning font-bold;
+
+        &:hover {
+            /* text-secondary */
+            @apply text-secondary;
+        }
+    }
+}
+
+/* Button Styling */
+.button-box {
+    /* bg-bg-light border border-white rounded-lg p-2 */
+    @apply bg-bg-dark-900 border border-white rounded-lg p-2 mt-4;
+}
+.button-box:hover {
+    /* bg-bg-light */
+    @apply bg-bg-dark-800;
+}
+.button-text {
+    /* text-white */
+    @apply text-white text-center font-bold;
+}
+.button-link{
+    /* text-white */
+    @apply text-white text-center font-bold mt-3;
+
+    &:hover {
+        /* text-white */
+        @apply text-secondary;
+    }
+
+}
+
+
+/* Card Styling */
+.card-box {
+    /* bg-bg-light border border-white rounded-lg p-4 */
+    @apply bg-bg-dark-900 border border-white rounded-lg p-10 w-3/4;
+}
+
+/* Input Styling */
+.input-box {
+    @apply bg-bg-dark-700 border border-white text-white rounded-lg p-2 w-full;
+}
+.input-box:focus {
+    @apply bg-bg-dark-800 border-0;
+}
+.input-password {
+    @apply bg-bg-dark-700 border border-white text-white rounded-lg p-2 flex flex-row justify-between;
+}
+.password-text {
+    @apply w-11/12;
+}
+.input-header {
+    @apply text-xl font-bold text-white;
+}
+
+.input-divider {
+    @apply border-b border-white rounded my-2;
+}
+
+.error {
+    @apply text-danger font-bold text-lg text-center;
+}
+.error-text {
+    @apply text-danger font-bold text-xs;
+}
+
+/* Image Scaling */
+.img-fix > * > *{
+    width: auto !important;
+}
+
+.h-inherit {
+    height: inherit !important;
 }
