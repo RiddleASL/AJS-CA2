@@ -3,21 +3,23 @@ import { useState, useEffect } from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import {Picker } from '@react-native-picker/picker';
 import Ionicons from "@expo/vector-icons/Ionicons";
-import MultiSelect from 'react-native-multiple-select';
-import { router } from "expo-router";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { router, useLocalSearchParams } from "expo-router";
 
-export default function Create() {
+export default function Edit() {
+    const {id} = useLocalSearchParams();
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [albums, setAlbums] = useState([]);
     const [artists, setArtists] = useState([]);
     const token = localStorage.getItem('token');
+
     //form data
     const [title, setTitle] = useState('');
     const [artistIds, setArtistIds] = useState([]);
+    const [releaseDate, setReleaseDate] = useState('');
     const [selectedArtists, setSelectedArtists] = useState([]);
-    const [selectedAlbum, setSelectedAlbum] = useState();
-    const [duration, setDuration] = useState(0);
 
 
     useEffect(() => {
@@ -76,11 +78,6 @@ export default function Create() {
 
     const handleSubmit = () => {
         console.log('submit form');
-        console.log(title, artistIds, selectedAlbum, duration);
-        if(artistIds.includes("Select artists") || artistIds.length < 1) {
-            alert('select artists');
-            return;
-        }
 
         //check for duplicates
         const duplicate = artistIds.some((val, i) => artistIds.indexOf(val) !== i);
@@ -89,15 +86,6 @@ export default function Create() {
             return;
         }
 
-        if(!selectedAlbum) {
-            alert('select album');
-            return;
-        }
-
-        if(!duration) {
-            alert('enter duration');
-            return;
-        }
 
         if(!title) {
             alert('enter title');
@@ -107,18 +95,17 @@ export default function Create() {
         const data = {
             title: title,
             artists: artistIds,
-            albumId: selectedAlbum,
-            duration: duration
+            releaseDate: Date()
         }
         const config = {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         }
-        axios.post('https://ajs-api.vercel.app/api/songs', data, config)
+        axios.post('https://ajs-api.vercel.app/api/albums/', data, config)
             .then(response => {
                 console.log(response.data);
-                router.push('/songs');
+                router.push('/albums');
             })
             .catch(error => {
                 console.log(error.response.data);
@@ -126,11 +113,11 @@ export default function Create() {
             });
             
     }
-    const handleDuration = (e) => {
-        setDuration(e.target.value);
-    }
     const handleTitle = (e) => {
         setTitle(e.target.value);
+    }
+    const handleReleaseDate = (e) => {
+        setReleaseDate(e.target.value);
     }
 
     const addArtist = (artistId) => {
@@ -146,19 +133,7 @@ export default function Create() {
         <View className="default-container">
             <Text className="text-2xl font-bold">Create a new song</Text>
             <Text className="text-lg mt-2">Song Title</Text>
-            <TextInput className="border border-gray-300 p-2 w-full mt-2 input-box" placeholder="Song title" onChange={handleTitle}/>
-            <hr className="border border-2 border-white rounded my-2" />
-            <Text className="text-lg mt-2">Select Album</Text>
-            <Picker 
-                selectedValue={selectedAlbum}
-                onValueChange={(itemValue, itemIndex) => setSelectedAlbum(itemValue)}
-                className="border border-gray-300 p-2 w-full mt-2 input-box"
-            >
-                <Picker.Item label="Select an album" value={null} />
-                {albums.map(album => (
-                    <Picker.Item key={album.id} label={album.title} value={album._id} />
-                ))}
-            </Picker>
+            <TextInput className="border border-gray-300 p-2 w-full mt-2 input-box" value={title} onChange={handleTitle}/>
             <hr className="border border-2 border-white rounded my-2" />
             {/* multiple select for artists */}
             <Text className="text-lg mt-2">Select Artists</Text>
@@ -178,9 +153,7 @@ export default function Create() {
                 {artistInputs.length < 1 ? "" : <TouchableOpacity className="!w-fit" onPress={removeArtistInput}><Ionicons name='remove-circle' size={24} className="p-2" color={'white'}/> </TouchableOpacity> }
             </div>
             <hr className="border border-2 border-white rounded my-2" />
-            <Text className="text-lg mt-2">Duration (example, 4.15: 4 minutes, 15 seconds)</Text>
-            <TextInput className="border border-gray-300 p-2 w-full mt-2 input-box" placeholder="Duration" onChange={handleDuration} />
-            <button className="bg-blue-500 text-white p-2 w-full mt-2" onClick={handleSubmit}>Create</button>
+            <button className="bg-blue-500 text-white p-2 w-full mt-2" onClick={handleSubmit}>Save Edits</button>
         </View>
     )
 }

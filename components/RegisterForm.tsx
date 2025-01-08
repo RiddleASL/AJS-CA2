@@ -27,6 +27,7 @@ export default function LoginForm() {
         if(password !== confPass){
             setError({msg: "Passwords do not match"});
             setLoading(false);
+            return;
         }
 
         try {
@@ -34,9 +35,16 @@ export default function LoginForm() {
                 username: username,
                 password: password,
                 email: email
-            });
-            router.push('/profile');
-            localStorage.setItem('token', response.data.token);
+            }).then(() => {
+                const response = axios.post(apiURL + "login", {
+                    username: username,
+                    email: email,
+                    password: password
+                }).then(response => {
+                    localStorage.setItem('token', response.data.token);
+                    router.push('/profile');
+                })
+            })
         } catch (error) {
             setError(error.response.data);
             console.log(error.response.data);
